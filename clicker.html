@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clicker Game</title>
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      padding-top: 50px;
+    }
+
+    #score {
+      font-size: 28px;
+      margin: 20px;
+    }
+
+    #clicker-area {
+      position: relative;
+      display: inline-block;
+    }
+
+    #clicker-btn {
+      padding: 30px 60px;
+      font-size: 30px;
+      border-radius: 15px;
+      border: none;
+      background: #00c8ff;
+      color: white;
+      box-shadow: 0 0 20px #00c8ff;
+      cursor: pointer;
+      transition: 0.2s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    #clicker-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px #00eaff;
+    }
+
+    #cursors-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .cursor {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      background: url('img/cursor.png') no-repeat center center;
+      background-size: contain;
+      transform-origin: 0 -120px;
+      animation: orbit 6s linear infinite;
+    }
+
+    @keyframes orbit {
+      50% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .cursor.clicked {
+      animation: orbit 6s linear infinite, click-pulse 0.3s ease;
+    }
+
+    @keyframes click-pulse {
+      0%   { transform: scale(1) rotate(var(--angle, 0deg)); }
+      50%  { transform: scale(0.8) rotate(var(--angle, 0deg)); }
+      100% { transform: scale(1) rotate(var(--angle, 0deg)); }
+    }
+
+    .btn-upgrade {
+      padding: 10px 25px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      background: #00b06b;
+      color: white;
+      margin: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffae;
+      transition: 0.2s;
+    }
+
+    .btn-upgrade:hover {
+      background: #00d87d;
+    }
+
+    .upgrade {
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Clicker Game</h1>
+  <div id="score">Clicks: 0</div>
+
+  <div id="clicker-area">
+    <button id="clicker-btn">Click Me!</button>
+    <div id="cursors-container"></div>
+  </div>
+
+  <div class="upgrade">
+    <button class="btn-upgrade" onclick="buyUpgrade('doubleClick')">
+      Double Click (+1) – Cost: <span id="cost-doubleClick">50</span>
+    </button>
+  </div>
+
+  <div class="upgrade">
+    <button class="btn-upgrade" onclick="buyUpgrade('autoClicker')">
+      Auto Clicker (+1/s) – Cost: <span id="cost-autoClicker">100</span>
+    </button>
+  </div>
+
+  <div class="upgrade">
+    <button class="btn-upgrade" onclick="buyUpgrade('megaClick')">
+      Mega Click (+5) – Cost: <span id="cost-megaClick">300</span>
+    </button>
+  </div>
+
+  <div class="upgrade">
+    <button class="btn-upgrade" onclick="buyUpgrade('superAuto')">
+      Super Auto Clicker (+5/s) – Cost: <span id="cost-superAuto">500</span>
+    </button>
+  </div>
+
+  <script>
+    let clicks = 0;
+    let clickPower = 1;
+    let autoClickPower = 0;
+
+    const costs = {
+      doubleClick: 50,
+      autoClicker: 100,
+      megaClick: 300,
+      superAuto: 500,
+    };
+
+    const upgrades = {
+      doubleClick: { power: 1, type: 'click' },
+      autoClicker: { power: 1, type: 'auto' },
+      megaClick: { power: 5, type: 'click' },
+      superAuto: { power: 5, type: 'auto' },
+    };
+
+    const scoreDisplay = document.getElementById("score");
+    const clickerButton = document.getElementById("clicker-btn");
+    const cursorsContainer = document.getElementById("cursors-container");
+
+    clickerButton.addEventListener("click", () => {
+      clicks += clickPower;
+      updateDisplay();
+    });
+
+    function buyUpgrade(type) {
+      if (clicks >= costs[type]) {
+        clicks -= costs[type];
+        const upgrade = upgrades[type];
+
+        if (upgrade.type === 'click') {
+          clickPower += upgrade.power;
+        } else if (upgrade.type === 'auto') {
+          for (let i = 0; i < upgrade.power; i++) {
+            addCursor(100);
+          }
+          autoClickPower += upgrade.power;
+        }
+
+        costs[type] = Math.floor(costs[type] * 1.5);
+        document.getElementById(`cost-${type}`).textContent = costs[type];
+        updateDisplay();
+      } else {
+        alert("Not enough clicks!");
+      }
+    }
+
+    function updateDisplay() {
+      scoreDisplay.textContent = `Clicks: ${clicks}`;
+    }
+
+    setInterval(() => {
+      clicks += autoClickPower;
+      triggerCursorClick();
+      updateDisplay();
+    }, 1000);
+
+    function addCursor() {
+      const cursor = document.createElement('div');
+      cursor.classList.add('cursor');
+      const index = cursorsContainer.children.length;
+      const angle = (360 / (index + 1)) * index;
+      cursor.style.setProperty('--angle', `${angle}deg`);
+      cursor.style.transform = `rotate(${angle}deg)`;
+      cursor.style.animationDelay = `${index * 0.3}s`;
+      cursorsContainer.appendChild(cursor);
+    }
+
+    function triggerCursorClick() {
+      const cursors = cursorsContainer.children;
+      for (let i = 0; i < autoClickPower; i++) {
+        const cursor = cursors[i % cursors.length];
+        if (cursor) {
+          cursor.classList.remove('clicked');
+          void cursor.offsetHeight; // force reflow
+          cursor.classList.add('clicked');
+        }
+      }
+    }
+  </script>
+</body>
+</html>

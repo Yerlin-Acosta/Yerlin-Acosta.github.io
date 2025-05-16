@@ -1,0 +1,52 @@
+/*:
+ * @target MZ
+ * @plugindesc Spawns 6 orbs at 6 unique random locations among 26 predefined spawn events.
+ * @author OpenAI
+ *
+ * @help
+ * HOW TO USE:
+ * - Name your orb events exactly: Orb1, Orb2, ..., Orb6
+ * - Name your spawn points exactly: OrbSpawn1, OrbSpawn2, ..., OrbSpawn26
+ * - In an autorun or parallel event, run this Plugin Command: RandomOrbSpawner Spawn
+ * - It only runs once per playthrough by default.
+ *
+ * This plugin does not have plugin parameters or commands. It runs with the script:
+ *    RandomOrbSpawner.spawn()
+ */
+
+var RandomOrbSpawner = RandomOrbSpawner || {};
+
+(() => {
+  RandomOrbSpawner.spawn = function () {
+    const orbSpawnedSwitchId = 1; // Change if you want to use a different switch
+    if ($gameSwitches.value(orbSpawnedSwitchId)) return;
+
+    const totalSpawns = 26;
+    const orbCount = 6;
+    const usedSpawns = new Set();
+
+    function getRandomSpawn() {
+      let r;
+      do {
+        r = Math.floor(Math.random() * totalSpawns) + 1;
+      } while (usedSpawns.has(r));
+      usedSpawns.add(r);
+      return r;
+    }
+
+    for (let i = 1; i <= orbCount; i++) {
+      const orbName = `Orb${i}`;
+      const spawnIndex = getRandomSpawn();
+      const spawnName = `OrbSpawn${spawnIndex}`;
+
+      const orbEvent = $dataMap.events.find(e => e && e.name === orbName);
+      const spawnEvent = $dataMap.events.find(e => e && e.name === spawnName);
+
+      if (orbEvent && spawnEvent) {
+        $gameMap.event(orbEvent.id).locate(spawnEvent.x, spawnEvent.y);
+      }
+    }
+
+    $gameSwitches.setValue(orbSpawnedSwitchId, true);
+  };
+})();

@@ -1,0 +1,16 @@
+[
+null,
+{"id":1,"expanded":true,"name":"Test Map","order":1,"parentId":0,"scrollX":1374.8571428571427,"scrollY":768.8571428571428},
+{"id":2,"expanded":true,"name":"oHouse","order":4,"parentId":0,"scrollX":1830.8571428571427,"scrollY":1033.7142857142856,"quick":false},
+{"id":3,"expanded":true,"name":"iHouse","order":5,"parentId":2,"scrollX":1374.8571428571427,"scrollY":768.8571428571428,"quick":false},
+null,
+null,
+null,
+{"id":7,"expanded":true,"name":"bpass","order":6,"parentId":2,"scrollX":1374.8571428571427,"scrollY":1151.142857142857,"quick":false},
+{"id":8,"expanded":true,"name":"Houses","order":2,"parentId":1,"scrollX":1374.8571428571427,"scrollY":768.8571428571428,"quick":false},
+{"id":9,"expanded":false,"name":"Office 1F","order":9,"parentId":7,"scrollX":816,"scrollY":640,"quick":false},
+null,
+{"id":11,"expanded":false,"name":"bpassdungeon","order":7,"parentId":7,"scrollX":1374.8571428571427,"scrollY":1631.142857142857,"quick":false},
+{"id":12,"expanded":false,"name":"Normal Town","order":8,"parentId":7,"scrollX":1388.5714285714284,"scrollY":1151.142857142857,"quick":false},
+{"id":13,"expanded":false,"name":"Horror","order":3,"parentId":1,"scrollX":1799.9999999999998,"scrollY":1277.142857142857,"quick":false}
+]
