@@ -12,5 +12,5 @@ null,
 null,
 {"id":11,"expanded":false,"name":"bpassdungeon","order":7,"parentId":7,"scrollX":1374.8571428571427,"scrollY":1631.142857142857,"quick":false},
 {"id":12,"expanded":false,"name":"Normal Town","order":8,"parentId":7,"scrollX":1388.5714285714284,"scrollY":1151.142857142857,"quick":false},
-{"id":13,"expanded":false,"name":"Horror","order":3,"parentId":1,"scrollX":1799.9999999999998,"scrollY":1277.142857142857,"quick":false}
+{"id":13,"expanded":false,"name":"Horror","order":3,"parentId":1,"scrollX":1558.2857142857142,"scrollY":1127.142857142857,"quick":false}
 ]
